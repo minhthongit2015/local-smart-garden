@@ -11,7 +11,7 @@ const routes = require('./routes');
 const apis = require('./apis');
 const WebsocketManager = require('./websocket');
 const Gardener = require('./services/gardener');
-
+const SystemInfo = require('./helpers/system-info');
 
 // Global Config
 const serverConfig = require('../config').Server;
@@ -45,8 +45,11 @@ WebsocketManager.setup(io);
 server.listen(serverConfig.port);
 server.on('listening', () => {
   const address = server.address();
-  const bind = typeof address === 'string' ? `pipe ${address}` : `port + ${address.port}`;
-  serverDebug(`Server running at: ${bind}`);
+  if (typeof address === 'string') {
+    serverDebug(`Server running at pipe: ${address}`);
+  } else {
+    SystemInfo.showServerPorts(address.port, serverDebug);
+  }
   Gardener.startWorking();
 });
 

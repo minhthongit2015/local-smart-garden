@@ -39,11 +39,11 @@ module.exports = class WebsocketManagerCore {
     WebsocketManagerCore.wsServer = wsServer;
     wsServer.on(WS_EVENTS.connection, (socket) => {
       try {
-        serverDebug('a user connected');
+        serverDebug('User connected: ', socket.id, socket.conn.remoteAddress);
         WebsocketManagerCore.accept(socket);
   
         socket.on(WS_EVENTS.disconnect, (event) => {
-          serverDebug(event, socket.id, socket.conn.remoteAddress);
+          serverDebug('User disconnected: ', socket.id, socket.conn.remoteAddress);
         });
       } catch (wsClientError) {
         LoggerService.error(wsClientError);

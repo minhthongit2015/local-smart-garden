@@ -11,6 +11,6 @@ module.exports = class MessageHandler extends BaseHandler {
 
   handleMessage(socket, message, res) {
     console.log(message, this);
-    res(message);
+    if (res) res(message);
   }
 };
