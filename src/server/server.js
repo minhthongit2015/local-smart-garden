@@ -14,7 +14,7 @@ const Gardener = require('./services/gardener');
 const SystemInfo = require('./helpers/system-info');
 
 // Global Config
-const serverConfig = require('../config').Server;
+const serverConfig = require('../config/server');
 
 // Setup Debugging
 const serverDebug = debug('app:server');
@@ -38,10 +38,12 @@ app.use('/', routes);
 
 // Setup HTTP Server
 const server = http.createServer(app);
-const io = socketIO(server);
 
-WebsocketManager.setup(io);
+// Setup Websocket Server
+const GardenWebsocketServer = socketIO(server);
+WebsocketManager.setup(GardenWebsocketServer);
 
+// Start Listening
 server.listen(serverConfig.port);
 server.on('listening', () => {
   const address = server.address();

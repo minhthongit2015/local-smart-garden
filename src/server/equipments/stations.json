@@ -1,0 +1,41 @@
+[
+  {
+    "id": "STA-01",
+    "name": "Station 01",
+    "physical_address": "Station-01",
+    "type": "station",
+    "equipments": ["pump", "misting"]
+  },
+  {
+    "id": "Ctrl-01",
+    "parent": "STA-01",
+    "name": "Control Station 01",
+    "physical_address": "Control-Station-01",
+    "type": "child-station",
+    "equipments": ["led"]
+  },
+  {
+    "id": "Sen-01",
+    "parent": "STA-01",
+    "name": "Sensors Station 01",
+    "physical_address": "Sensors-Station-01",
+    "type": "child-station",
+    "equipments": ["temperature", "humidity"]
+  },
+  {
+    "id": "Sen-02",
+    "parent": "STA-01",
+    "name": "Sensors Station 02",
+    "physical_address": "Sensors-Station-02",
+    "type": "child-station",
+    "equipments": ["light"]
+  },
+  {
+    "id": "Sen-03",
+    "parent": "STA-01",
+    "name": "Sensors Station 03",
+    "physical_address": "Sensors-Station-03",
+    "type": "child-station",
+    "equipments": ["pH", "ppm"]
+  }
+]

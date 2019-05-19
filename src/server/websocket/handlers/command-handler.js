@@ -3,20 +3,18 @@
 const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
 
-module.exports = class EnvironmentHandler extends BaseHandler {
+module.exports = class CommandHandler extends BaseHandler {
   setup(io, clients) {
     super.setup(io, clients);
-    this.addEvent(WS_EVENTS.environment);
-    this.addListener(this.handleEnvironmentData.bind(this));
+    this.addEvent(WS_EVENTS.command);
+    this.addListener(this.handleServerCommand.bind(this));
   }
 
-  handleEnvironmentData(socket, data) {
-    console.log('on environment', data);
+  handleServerCommand(socket, data) {
+    console.log('on command', data);
     // TODO:  1. Phát sự kiện ra toàn vườn:
     //        + Mobile App đang kết nối qua Websocket
     //        + Browser đang kết nối qua Websocket
-    //        2. Lưu trữ tại máy một bản sao (.csv)
-    //        3. Gửi dữ liệu lên server thông qua superagent
-    //
+    //        + Các trạm đang kết nối đến Local Garden (điều khiển trạm)
   }
 };

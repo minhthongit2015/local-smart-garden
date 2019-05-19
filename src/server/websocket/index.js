@@ -1,26 +1,29 @@
 
-const { WS_EVENTS } = require('../../shared/constants');
-const WebsocketManagerCore = require('./ws-core');
-const WSHandlerFactory = require('./handlers/handler-factory');
+const GardenManager = require('./GardenManager');
+const CloudManager = require('./CloudManager');
 const LoggerService = require('../services/logger');
 
-module.exports = class WebsocketManager extends WebsocketManagerCore {
-  static setup(wsServer) {
+module.exports = class WebsocketManager {
+  static get garden() { return WebsocketManager._garden; }
+
+  static get cloud() { return WebsocketManager._cloud; }
+
+  static setup(GardenWebsocketServer) {
     try {
-      super.setup(wsServer);
-      WebsocketManager.pushHandler(WSHandlerFactory.get(WS_EVENTS.message));
-      WebsocketManager.pushHandler(WSHandlerFactory.get(WS_EVENTS.environment));
+      WebsocketManager._garden = new GardenManager();
+      WebsocketManager._cloud = new CloudManager();
+      WebsocketManager._garden.setup(GardenWebsocketServer);
+      WebsocketManager._cloud.setup();
     } catch (setupError) {
-      LoggerService.error(setupError);
+      LoggerService.error({ message: setupError.message, stack: setupError.stack });
     }
   }
 
-  static dispatchEvent(event) {
-    if (event.dest) {
-      const dest = typeof(event.dest) === 'object' ? event.dest : WebsocketManager.getClientById(event.dest);
-      dest.emit(event.type, event.data, event.callback);
-    } else {
-      WebsocketManager.wsServer.emit(event.type, event.data, event.callback);
-    }
+  static dispatchGardenEvent(event) {
+    this.garden.dispatchEvent(event);
+  }
+
+  static dispatchCloudEvent(event) {
+    this.cloud.dispatchEvent(event);
   }
 };
