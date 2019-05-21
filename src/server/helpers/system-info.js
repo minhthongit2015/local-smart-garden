@@ -17,7 +17,6 @@ module.exports = class SystemInfo {
         localIPs.push(iface.address);
       });
     });
-
     return localIPs;
   }
 

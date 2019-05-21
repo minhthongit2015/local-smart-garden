@@ -35,7 +35,7 @@ module.exports = class WebsocketManagerCore {
 
   pushHandler(handler, socket) {
     this.handlers.push(handler);
-    handler.setup(this.io, this.clients);
+    handler.setup(this.io, this.clients, this);
     if (!socket) {
       Object.keys(this.clients).forEach((clientId, index, clients) => {
         handler.attach(clients[clientId]);

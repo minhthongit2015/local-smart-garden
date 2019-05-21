@@ -10,8 +10,8 @@ module.exports = class WebsocketManager {
 
   static setup(GardenWebsocketServer) {
     try {
-      WebsocketManager._garden = new GardenManager();
-      WebsocketManager._cloud = new CloudManager();
+      WebsocketManager._garden = new GardenManager(WebsocketManager);
+      WebsocketManager._cloud = new CloudManager(WebsocketManager);
       WebsocketManager._garden.setup(GardenWebsocketServer);
       WebsocketManager._cloud.setup();
     } catch (setupError) {

@@ -6,15 +6,15 @@ const serverConfig = require('./src/config/server');
 
 const BUILD_DIR = path.resolve(__dirname, `${serverConfig.publicFolder}/build`);
 const APP_DIR = path.resolve(__dirname, './src/client');
-const SERVER_DIR = path.resolve(__dirname, './src/server');
+// const SERVER_DIR = path.resolve(__dirname, './src/server');
 
 const config = {
   target: 'node',
   mode: 'development',
   devtool: 'source-map',
   entry: {
-    client: `${APP_DIR}/client.jsx`,
-    server: `${SERVER_DIR}/server.js`
+    client: `${APP_DIR}/client.jsx`
+    // server: `${SERVER_DIR}/server.js`
   },
   output: {
     filename: '[name]-bundle.js',

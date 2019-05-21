@@ -8,6 +8,11 @@ const ServerConfig = require('../../config/server');
 
 module.exports = class CloudManager extends WebsocketManagerCore {
   get cloudSocket() { return this._cloudSocket; }
+
+  constructor(root) {
+    super();
+    this.WSManager = root;
+  }
   
   setup() {
     try {

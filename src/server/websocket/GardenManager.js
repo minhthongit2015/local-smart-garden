@@ -5,11 +5,17 @@ const WSHandlerFactory = require('./handlers/handler-factory');
 const LoggerService = require('../services/logger');
 
 module.exports = class GardenManager extends WebsocketManagerCore {
+  constructor(root) {
+    super();
+    this.WSManager = root;
+  }
+
   setup(wsServer) {
     try {
       super.setup(wsServer);
       this.pushHandler(WSHandlerFactory.get(WS_EVENTS.message));
       this.pushHandler(WSHandlerFactory.get(WS_EVENTS.environment));
+      this.pushHandler(WSHandlerFactory.get(WS_EVENTS.stationConnect));
     } catch (setupError) {
       LoggerService.error({ message: setupError.message, stack: setupError.stack });
     }
