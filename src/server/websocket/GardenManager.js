@@ -16,6 +16,8 @@ module.exports = class GardenManager extends WebsocketManagerCore {
       this.pushHandler(WSHandlerFactory.get(WS_EVENTS.message));
       this.pushHandler(WSHandlerFactory.get(WS_EVENTS.environment));
       this.pushHandler(WSHandlerFactory.get(WS_EVENTS.stationConnect));
+      this.pushHandler(WSHandlerFactory.get(WS_EVENTS.stationState));
+      this.pushHandler(WSHandlerFactory.get(WS_EVENTS.mobileConnect));
     } catch (setupError) {
       LoggerService.error({ message: setupError.message, stack: setupError.stack });
     }

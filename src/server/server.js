@@ -1,5 +1,6 @@
 // Libraries / Modules
 // import '@babel/polyfill';
+const colors = require('colors/safe');
 const express = require('express');
 const http = require('http');
 const path = require('path');
@@ -43,7 +44,7 @@ WebsocketManager.setup(GardenWebsocketServer);
 // Start Listening
 server.listen(serverConfig.port);
 server.on('listening', () => {
-  console.log(`\r\n\r\n${new Array(30).fill(' -').join('')}\r\n`);
+  console.log(colors.rainbow(`\r\n\r\n${new Array(30).fill(' -').join('')}\r\n`));
   const address = server.address();
   if (typeof address === 'string') {
     serverDebug(`Server running at pipe: ${address}`);

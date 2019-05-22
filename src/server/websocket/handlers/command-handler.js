@@ -1,7 +1,10 @@
 /* eslint-disable class-methods-use-this */
 
+const colors = require('colors/safe');
+const debug = require('debug')('app:server');
 const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
+const StationManager = require('../../services/stations-manager');
 
 module.exports = class CommandHandler extends BaseHandler {
   setup(io, clients, manager) {
@@ -11,7 +14,21 @@ module.exports = class CommandHandler extends BaseHandler {
   }
 
   handleServerCommand(socket, data) {
-    // console.log('on command', data);
+    debug(colors.yellow('[Cloud]'), WS_EVENTS.command, JSON.stringify(data));
+    switch (data.targetType) {
+    case 'station': {
+      const station = StationManager.findByStationId(data.targetId);
+      if (station) {
+        station.setState(data);
+        station.syncState();
+      }
+    }
+      break;
+    case 'garden':
+      break;
+    default:
+      break;
+    }
     // TODO:  1. Phát sự kiện ra toàn vườn:
     //        + Mobile App đang kết nối qua Websocket
     //        + Browser đang kết nối qua Websocket

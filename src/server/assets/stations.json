@@ -5,7 +5,7 @@
     "physical_address": "Station-01",
     "type": "station",
     "equipments": [
-      "pump", "misting", "led",
+      "pump", "misting", "led", "nutrient",
       "temperature", "humidity", "pH", "ppm", "light"
     ]
   }

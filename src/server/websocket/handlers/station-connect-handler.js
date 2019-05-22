@@ -1,6 +1,8 @@
 
 /* eslint-disable class-methods-use-this */
 
+const colors = require('colors/safe');
+const debug = require('debug')('app:server');
 const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
 const StationManager = require('../../services/stations-manager');
@@ -15,7 +17,7 @@ module.exports = class CommandHandler extends BaseHandler {
   }
 
   async handleStationConnect(socket, data) {
-    console.log(WS_EVENTS.stationConnect, data.id, socket.id, socket.conn.remoteAddress);
+    debug(colors.green('[Station]'), WS_EVENTS.stationConnect, data.id, socket.conn.remoteAddress);
     const isVerified = await StationManager.authStation(data);
     if (!isVerified) {
       return socket.emit(WS_EVENTS.garden2Station, 'Unauthorized');
@@ -25,7 +27,8 @@ module.exports = class CommandHandler extends BaseHandler {
       garden: GardenInfo.physicalAddress
     });
     this.manager.WSManager.dispatchCloudEvent(stationConnectEvent);
-    return StationManager.attachStation(data, socket);
+    StationManager.attachStation(data, socket);
+    return socket.emit(WS_EVENTS.stationAccepted, '');
     // TODO:  + Nhận dữ liệu từ trạm con
     //        + Kiểm tra hợp lệ
     //        + Gửi thông tin lên server (để báo cho mobile nếu đang kết nối trong thời gian thực)

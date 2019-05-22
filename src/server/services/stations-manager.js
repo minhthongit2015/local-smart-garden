@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-
+const Station = require('../models/station');
 
 module.exports = class StationManager {
   static get stations() {
@@ -18,10 +18,17 @@ module.exports = class StationManager {
   static attachStation(newStation, stationSocket) {
     const existStation = StationManager.stations.find(station => station.id === newStation.id);
     if (existStation) {
-      existStation.socket = stationSocket;
+      existStation.updateSocket(stationSocket);
     } else {
-      this.stations.push(newStation);
-      newStation.socket = stationSocket;
+      this.stations.push(new Station(this, newStation, stationSocket));
     }
+  }
+
+  static findBySocket(socket) {
+    return StationManager.stations.find(station => station.socket.id === socket.id);
+  }
+
+  static findByStationId(stationId) {
+    return StationManager.stations.find(station => station.id === stationId);
   }
 };

@@ -7,6 +7,8 @@ const EnvironmentHandler = require('./environment-handler');
 const CommandHandler = require('./command-handler');
 const CloudConnectHandler = require('./cloud-connect-handler');
 const StationConnectHandler = require('./station-connect-handler');
+const StationStateHandler = require('./station-state-handler');
+const MobileConnectHandler = require('./mobile-connect-handler');
 
 module.exports = class HandlerFactory {
   static get MessageHandler() {
@@ -28,6 +30,14 @@ module.exports = class HandlerFactory {
   static get StationConnectHandler() {
     return HandlerFactory._StationConnectHandler = HandlerFactory._StationConnectHandler || new StationConnectHandler();
   }
+  
+  static get StationStateHandler() {
+    return HandlerFactory._StationStateHandler = HandlerFactory._StationStateHandler || new StationStateHandler();
+  }
+  
+  static get MobileConnectHandler() {
+    return HandlerFactory._MobileConnectHandler = HandlerFactory._MobileConnectHandler || new MobileConnectHandler();
+  }
 
   static get(type) {
     switch (type) {
@@ -41,6 +51,10 @@ module.exports = class HandlerFactory {
       return HandlerFactory.CloudConnectHandler;
     case WS_EVENTS.stationConnect:
       return HandlerFactory.StationConnectHandler;
+    case WS_EVENTS.stationState:
+      return HandlerFactory.StationStateHandler;
+    case WS_EVENTS.mobileConnect:
+      return HandlerFactory.MobileConnectHandler;
     default:
       return null;
     }
