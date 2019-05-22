@@ -3,21 +3,18 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-const debug = require('debug');
+const serverDebug = require('debug')('app:server');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const socketIO = require('socket.io');
 const routes = require('./routes');
 const apis = require('./apis');
 const WebsocketManager = require('./websocket');
-const Gardener = require('./services/gardener');
 const SystemInfo = require('./helpers/system-info');
+const startUp = require('./startup');
 
 // Global Config
 const serverConfig = require('../config/server');
-
-// Setup Debugging
-const serverDebug = debug('app:server');
 
 // Init the Server
 const app = express();
@@ -46,13 +43,14 @@ WebsocketManager.setup(GardenWebsocketServer);
 // Start Listening
 server.listen(serverConfig.port);
 server.on('listening', () => {
+  console.log(`\r\n\r\n${new Array(30).fill(' -').join('')}\r\n`);
   const address = server.address();
   if (typeof address === 'string') {
     serverDebug(`Server running at pipe: ${address}`);
   } else {
     SystemInfo.showServerPorts(address.port, serverDebug);
   }
-  Gardener.startWorking();
+  startUp();
 });
 
 

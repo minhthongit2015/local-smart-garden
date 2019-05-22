@@ -11,7 +11,7 @@ module.exports = class CommandHandler extends BaseHandler {
   }
 
   handleServerCommand(socket, data) {
-    console.log('on command', data);
+    // console.log('on command', data);
     // TODO:  1. Phát sự kiện ra toàn vườn:
     //        + Mobile App đang kết nối qua Websocket
     //        + Browser đang kết nối qua Websocket

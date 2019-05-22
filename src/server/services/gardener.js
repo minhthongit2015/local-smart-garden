@@ -24,13 +24,23 @@ module.exports = class Gardener {
 
   static test() {
     setInterval(() => {
-      const first = WebsocketManager.garden.clientArray[0];
-      Gardener.dispatchCommand({
-        state1: Math.random(),
-        state2: Math.random() > 0.5,
-        state3: Math.random().toString()
-      }, first);
+      // const first = WebsocketManager.garden.clientArray[0];
+      // Gardener.dispatchCommand({
+      //   state1: Math.random(),
+      //   state2: Math.random() > 0.5,
+      //   state3: Math.random().toString()
+      // }, first);
+      const factors = {
+        temperature: 27.5,
+        humidity: .85,
+        light: 800,
+        treeDays: 27.5
+      };
+
     }, 2000);
   }
 
+  static checkingPlant() {
+
+  }
 };

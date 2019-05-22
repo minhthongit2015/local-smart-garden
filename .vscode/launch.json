@@ -10,7 +10,7 @@
       "name": "no babel",
       "runtimeExecutable": "nodemon",
       "program": "${workspaceFolder}/src/server/server.js",
-      "args": ["--exclude", "${workspaceFolder}/src/client", "-w", "${workspaceFolder}/src"],
+      "args": ["--exclude", "${workspaceFolder}/src/client; ${workspaceFolder}/src/server/AIML-Models", "-w", "${workspaceFolder}/src"],
       "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

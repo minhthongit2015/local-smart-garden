@@ -14,8 +14,8 @@ module.exports = class extends BaseHandler {
     this.addListener(this.handleConnectToServer.bind(this));
   }
 
-  handleConnectToServer(socket, data) {
-    console.log('Connected to Server', data);
+  handleConnectToServer() {
+    console.log('Connection to Server established!');
     const connectEvent = new WebsocketEvent(WS_EVENTS.gardenConnect, {
       physicalAddress: GardenInfo.physicalAddress,
       secretKey: GardenInfo.secretKey,
