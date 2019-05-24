@@ -19,7 +19,7 @@ module.exports = class CommandHandler extends BaseHandler {
     case 'station': {
       const station = StationManager.findByStationId(data.targetId);
       if (station) {
-        station.setState(data);
+        station.setState(data.state);
         station.syncState();
       }
     }

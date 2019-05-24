@@ -31,7 +31,8 @@ module.exports = class Gardener {
       //   state2: Math.random() > 0.5,
       //   state3: Math.random().toString()
       // }, first);
-    }, 10000);
+      Gardener.takeCareOfAllStations();
+    }, 15000);
   }
 
   static async takeCareOfStation(station) {

@@ -34,7 +34,7 @@ module.exports = class {
       }
     });
     if (!hasNewUpdate) {
-      debug(colors.magenta('[Updater]'), 'Every models are up to date.');
+      debug(colors.magenta('[Updater]'), 'Every AI/ML models are up to date.');
     }
   }
 };

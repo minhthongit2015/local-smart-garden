@@ -2,6 +2,7 @@
 
 /* eslint-disable class-methods-use-this */
 
+const colors = require('colors/safe');
 const debug = require('debug')('app:server');
 const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
@@ -16,7 +17,7 @@ module.exports = class CommandHandler extends BaseHandler {
   }
 
   async handleMobileConnect(socket, data, res) {
-    debug('[Mobile]', WS_EVENTS.mobileConnect, data, socket.id, socket.conn.remoteAddress);
+    debug(colors.blue('[Mobile]'), WS_EVENTS.mobileConnect, data, socket.id, socket.conn.remoteAddress);
     if (false) {
       return !res ? null : res('Unauthorized!');
     }

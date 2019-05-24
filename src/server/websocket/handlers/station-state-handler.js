@@ -6,6 +6,7 @@ const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
 const StationManager = require('../../services/stations-manager');
 const Gardener = require('../../services//gardener');
+const WebsocketEvent = require('../event');
 
 module.exports = class extends BaseHandler {
   setup(io, clients, manager) {
@@ -21,6 +22,11 @@ module.exports = class extends BaseHandler {
     const hasChange = await Gardener.takeCareOfStation(station);
     if (hasChange) {
       // socket.emit(WS_EVENTS.command, station.state);
+      const envEvent = new WebsocketEvent(WS_EVENTS.environment, {
+        stationId: station.id,
+        state: station.state
+      });
+      this.manager.WSManager.dispatchCloudEvent(envEvent);
     }
   }
 };

@@ -30,6 +30,7 @@ module.exports = class Station {
 
   setState(newState) {
     let hasChange = false;
+    if (!newState) return false;
     Object.keys(newState).forEach(key => {
       if (this.state[key] !== undefined && this.state[key] !== newState[key]) {
         hasChange = true;
