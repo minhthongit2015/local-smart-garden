@@ -9,10 +9,18 @@ const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const socketIO = require('socket.io');
 const routes = require('./routes');
-const apis = require('./apis');
+const apis = require('./api');
 const WebsocketManager = require('./websocket');
 const SystemInfo = require('./helpers/system-info');
 const startUp = require('./startup');
+const Logger = require('./services/Loggerz');
+
+process.on('unhandledRejection', (reason) => {
+  Logger.error(`Unhandled Rejection at:\r\n${reason.stack || reason}`);
+});
+process.on('uncaughtException', (exeption) => {
+  Logger.error(`Uncaught Exception at:\r\n${exeption}`);
+});
 
 // Global Config
 const serverConfig = require('../config/server');

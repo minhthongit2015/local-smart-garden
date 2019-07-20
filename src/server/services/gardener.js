@@ -4,7 +4,7 @@ const tf = require('@tensorflow/tfjs-node');
 const WebsocketManager = require('../websocket');
 const WebsocketEvent = require('../websocket/event');
 const { WS_EVENTS } = require('../../shared/constants');
-const LoggerService = require('../services/logger');
+const LoggerService = require('./Loggerz');
 const AIML = require('../services/AI-ML');
 const StationManager = require('./stations-manager');
 

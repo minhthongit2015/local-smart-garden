@@ -1,7 +1,7 @@
 
 const debug = require('debug');
 const { WS_EVENTS } = require('../../shared/constants');
-const LoggerService = require('../services/logger');
+const LoggerService = require('../services/Loggerz');
 
 const serverDebug = debug('app:ws-core');
 

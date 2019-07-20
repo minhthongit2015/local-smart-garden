@@ -3,7 +3,7 @@ const SocketIOClient = require('socket.io-client');
 const { WS_EVENTS } = require('../../shared/constants');
 const WebsocketManagerCore = require('./ManagerCore');
 const WSHandlerFactory = require('./handlers/handler-factory');
-const LoggerService = require('../services/logger');
+const LoggerService = require('../services/Loggerz');
 const ServerConfig = require('../../config/server');
 
 module.exports = class CloudManager extends WebsocketManagerCore {
