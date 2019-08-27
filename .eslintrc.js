@@ -1,20 +1,20 @@
-{
-  "env": {
+module.exports = {
+  env: {
     "browser": true,
     "node": true,
     "commonjs": true,
     "es6": true
   },
-  "parser": "babel-eslint",
-  "extends": ["airbnb", "prettier"],
-  "parserOptions": {
+  parser: "babel-eslint",
+  extends: ["airbnb"],
+  parserOptions: {
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  plugins: ["react"],
   "rules": {
     "indent": ["error", 2],
     "linebreak-style": ["error", "windows"],
@@ -29,6 +29,13 @@
     "jsx-a11y/label-has-for": 0,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/no-static-element-interactions": 0,
-    "react/sort-comp": 0
+    "react/prefer-stateless-function": 0,
+    "react/sort-comp": 0,
+    "no-plusplus": 0,
+    "react/forbid-prop-types": 0,
+    "no-param-reassign": 0,
+    "no-console": 0,
+    "no-alert": 0,
+    "no-prompt": 0
   }
 }

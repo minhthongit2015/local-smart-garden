@@ -5,9 +5,9 @@ const colors = require('colors/safe');
 const debug = require('debug')('app:server');
 const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
-const GardenInfo = require('../../../config/garden');
+const GardenInfo = require('../../config/garden');
 const WebsocketEvent = require('../event');
-const SystemInfo = require('../../helpers/system-info');
+const SystemInfo = require('../../utils/system-info');
 
 module.exports = class extends BaseHandler {
   setup(io, clients, manager) {

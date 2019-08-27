@@ -1,10 +1,8 @@
 
 const SocketIOClient = require('socket.io-client');
-const { WS_EVENTS } = require('../../shared/constants');
 const WebsocketManagerCore = require('./ManagerCore');
-const WSHandlerFactory = require('./handlers/handler-factory');
-const LoggerService = require('../services/Loggerz');
-const ServerConfig = require('../../config/server');
+const LoggerService = require('../services/Logger');
+const ServerConfig = require('../config');
 
 module.exports = class CloudManager extends WebsocketManagerCore {
   get cloudSocket() { return this._cloudSocket; }
@@ -18,15 +16,13 @@ module.exports = class CloudManager extends WebsocketManagerCore {
     try {
       this.connectToCloudServer();
       super.setup(this.cloudSocket);
-      this.pushHandler(WSHandlerFactory.get(WS_EVENTS.command));
-      this.pushHandler(WSHandlerFactory.get(WS_EVENTS.cloudConnect));
     } catch (setupError) {
       LoggerService.error({ message: setupError.message, stack: setupError.stack });
     }
   }
 
   connectToCloudServer() {
-    this._cloudSocket = SocketIOClient(ServerConfig.cloudAddress, {
+    this._cloudSocket = SocketIOClient(ServerConfig.cloudEndPoint, {
       transports: ['websocket'],
       reconnection: true,
       reconnectionDelay: 1000,

@@ -5,7 +5,7 @@ const debug = require('debug')('app:server');
 const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
 const StationManager = require('../../services/stations-manager');
-const Gardener = require('../../services//gardener');
+const Gardener = require('../../services/gardener');
 const WebsocketEvent = require('../event');
 
 module.exports = class extends BaseHandler {

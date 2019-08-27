@@ -10,7 +10,7 @@ module.exports = class SystemInfo {
   static listAllLocalIP() {
     const localIPs = [];
     const interfaces = SystemInfo.listInterfaces();
-    Object.keys(interfaces).forEach(interfaceName => {
+    Object.keys(interfaces).forEach((interfaceName) => {
       interfaces[interfaceName].forEach((iface) => {
         if (iface.family !== 'IPv4' || iface.internal !== false) {
           return;
@@ -25,23 +25,22 @@ module.exports = class SystemInfo {
     return SystemInfo.listAllLocalIP()[0];
   }
 
-  static showServerPorts(port, serverDebug) {
+  static showServerPorts(port, debug) {
     const interfaces = SystemInfo.listInterfaces();
-    serverDebug(colors.underline('[Server running at] > _'));
-    Object.keys(interfaces).forEach(interfaceName => {
+    debug(colors.underline('[Server running at] > '));
+    Object.keys(interfaces).forEach((interfaceName) => {
       let alias = 0;
       interfaces[interfaceName].forEach((iface) => {
         if (iface.family !== 'IPv4' || iface.internal !== false) {
           return;
         }
         if (alias >= 1) {
-          serverDebug('  + ', `(${interfaceName}/${alias}) ${colors.red(iface.address)}:${colors.red(port)}`);
+          debug('  + ', `(${interfaceName}/${alias}) ${colors.red(iface.address)}:${colors.red(port)}`);
         } else {
-          serverDebug('  + ', `(${interfaceName}) ${colors.red(iface.address)}:${colors.red(port)}`);
+          debug('  + ', `(${interfaceName}) ${colors.red(iface.address)}:${colors.red(port)}`);
         }
         alias += 1;
       });
     });
-
   }
 };

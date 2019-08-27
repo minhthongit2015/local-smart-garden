@@ -7,7 +7,7 @@ const BaseHandler = require('./base-handler');
 const { WS_EVENTS } = require('../../../shared/constants');
 const StationManager = require('../../services/stations-manager');
 const WebsocketEvent = require('../event');
-const GardenInfo = require('../../../config/garden');
+const GardenInfo = require('../../config/garden');
 
 module.exports = class CommandHandler extends BaseHandler {
   setup(io, clients, manager) {

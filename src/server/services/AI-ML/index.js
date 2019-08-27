@@ -1,6 +1,6 @@
 
 // const superagent = require('superagent');
-// const config = require('../../../config/server');
+// const config = require('../../../config');
 const tf = require('@tensorflow/tfjs-node');
 const AIMLManager = require('./manager');
 

@@ -1,6 +1,4 @@
 
-const { WS_EVENTS } = require('../../shared/constants');
-
 module.exports = class Station {
   get id() { return this.info.id; }
 
@@ -42,7 +40,7 @@ module.exports = class Station {
   }
 
   syncState() {
+    // eslint-disable-next-line no-useless-return
     if (!this.dirty) return;
-    this.socket.emit(WS_EVENTS.command, this.state);
   }
 };

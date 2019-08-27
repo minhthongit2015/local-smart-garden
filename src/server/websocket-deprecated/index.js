@@ -1,7 +1,7 @@
 
 const GardenManager = require('./GardenManager');
 const CloudManager = require('./CloudManager');
-const LoggerService = require('../services/Loggerz');
+const LoggerService = require('../services/Logger');
 
 module.exports = class WebsocketManager {
   static get garden() { return WebsocketManager._garden; }

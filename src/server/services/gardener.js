@@ -1,10 +1,7 @@
 
 const debug = require('debug')('app:gardener');
 const tf = require('@tensorflow/tfjs-node');
-const WebsocketManager = require('../websocket');
-const WebsocketEvent = require('../websocket/event');
-const { WS_EVENTS } = require('../../shared/constants');
-const LoggerService = require('./Loggerz');
+const LoggerService = require('./Logger');
 const AIML = require('../services/AI-ML');
 const StationManager = require('./stations-manager');
 
@@ -18,9 +15,7 @@ module.exports = class Gardener {
     }
   }
 
-  static dispatchCommand(command, dest) {
-    const commandEvent = new WebsocketEvent(WS_EVENTS.command, command, dest);
-    WebsocketManager.dispatchGardenEvent(commandEvent);
+  static dispatchCommand() {
   }
 
   static test() {
