@@ -5,6 +5,7 @@ const WebsocketManagerCore = require('./ws-core');
 const Logger = require('../services/Logger');
 const config = require('../config');
 const { Debug } = require('../utils/constants');
+const SessionService = require('../services/session');
 
 const debug = DebugHelper(Debug.ws.CORE);
 
@@ -34,10 +35,14 @@ module.exports = class WebsocketManager extends WebsocketManagerCore {
   }
 
   static sendToCloud(event, ...agrs) {
+    if (!this.cloud) return null;
     return this.cloud.emit(event, ...agrs);
   }
 
   static async connectToCloudServer() {
+    if (!SessionService.sessionId) {
+      await SessionService.requestSessionId();
+    }
     debug('Connecting to Cloud Server...');
     this.cloud = SocketIOClient(config.cloudEndPoint, {
       transports: ['websocket'],
@@ -46,7 +51,7 @@ module.exports = class WebsocketManager extends WebsocketManagerCore {
       reconnectionDelayMax: 5000,
       reconnectionAttempts: Infinity,
       query: {
-        token: 'OdwnBs6ZYe_OgV3VLofubdm32l7XyAlB'
+        token: SessionService.sessionId
       }
     });
     this.cloud.on('connect', async () => {

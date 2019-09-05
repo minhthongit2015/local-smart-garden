@@ -4,14 +4,20 @@ const SyncService = require('../../../services/sync');
 
 router.post('/', async (req, res) => {
   const { deviceId } = req.params;
-  const { temperature, humidity, light, pump, led, fan } = req.body;
+  const {
+    temperature, humidity, light, pump, led, fan
+  } = req.body;
   SyncService.emitAll('environment', {
     params: {
       deviceId
     },
     body: {
-      temperature, humidity, light,
-      pump, led, fan
+      temperature,
+      humidity,
+      light,
+      pump,
+      led,
+      fan
     }
   });
   res.send('got it');

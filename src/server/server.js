@@ -1,4 +1,5 @@
 
+
 const express = require('express');
 const http = require('http');
 const path = require('path');
@@ -130,9 +131,16 @@ class Server {
       Logger.error(`Unhandled Rejection at: \t ${reason.stack || reason}`);
     });
     process.on('uncaughtException', (exeption) => {
-      Logger.error(`Uncaught Exception at: \t ${exeption}`);
+      Logger.error(`Uncaught Exception at: \t ${exeption.message}`, exeption.stack);
     });
   }
 }
+
+process.on('unhandledRejection', (reason) => {
+  Logger.error(`Unhandled Rejection at: \t ${reason.stack || reason}`);
+});
+process.on('uncaughtException', (exeption) => {
+  Logger.error(`Uncaught Exception at: \t ${exeption.message}`, exeption.stack);
+});
 
 Server.start();

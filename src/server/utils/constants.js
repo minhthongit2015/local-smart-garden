@@ -1,11 +1,12 @@
 
-const endPoint = '/api/v1';
+const endPoint = 'http://localhost:5000/api/v1';
 const user = `${endPoint}/user`;
 const garden = `${endPoint}/garden`;
 const ai = `${endPoint}/ai`;
 
 const API = {
   endPoint,
+  session: `${endPoint}/sessions`,
   user: {
     getSession: `${user}/get-session`
   },
