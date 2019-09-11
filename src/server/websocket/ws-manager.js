@@ -7,6 +7,8 @@ const SessionService = require('../services/session');
 const Debugger = require('../services/Debugger');
 const Logger = require('../services/Logger');
 
+const SuperWebsocket = require('../utils/superws');
+
 module.exports = class WebsocketManager extends WebsocketManagerCore {
   static setup(wsServer) {
     Debugger.websocket('<*> Setup Websocket Manager');
@@ -37,10 +39,10 @@ module.exports = class WebsocketManager extends WebsocketManagerCore {
   }
 
   static async connectToCloudServer() {
+    Debugger.websocket('Connecting to Cloud Server...');
     if (!SessionService.sessionId) {
       await SessionService.requestSessionId();
     }
-    Debugger.websocket('Connecting to Cloud Server...');
     this.cloud = SocketIOClient(config.cloudEndPoint, {
       transports: ['websocket'],
       reconnection: true,
@@ -55,5 +57,6 @@ module.exports = class WebsocketManager extends WebsocketManagerCore {
       Debugger.websocket('Connected to Cloud Server');
     });
     this.accept(this.cloud);
+    SuperWebsocket.setup(this.cloud);
   }
 };

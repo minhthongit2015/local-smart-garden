@@ -13,7 +13,7 @@ router.post('/connect', (req, res) => {
 router.post('/state', (req) => {
   Logger.catch(() => {
     const { stationId } = req.params;
-    SyncService.emitCloud(`POST${apiEndpoints.gardens.stations.STATE(stationId || 1)}`, req.body);
+    SyncService.cloud.post(apiEndpoints.gardens.stations.STATE(stationId || 1), req.body);
   });
 });
 
