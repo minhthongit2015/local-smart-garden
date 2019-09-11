@@ -1,22 +1,19 @@
 /* @flow */
 const SocketIOClient = require('socket.io-client');
-const DebugHelper = require('debug');
 const WebsocketManagerCore = require('./ws-core');
-const Logger = require('../services/Logger');
 const config = require('../config');
-const { Debug } = require('../utils/constants');
 const SessionService = require('../services/session');
 
-const debug = DebugHelper(Debug.ws.CORE);
+const Debugger = require('../services/Debugger');
+const Logger = require('../services/Logger');
 
 module.exports = class WebsocketManager extends WebsocketManagerCore {
   static setup(wsServer) {
-    try {
+    Debugger.websocket('<*> Setup Websocket Manager');
+    Logger.catch(() => {
       super.setup(wsServer);
       this.connectToCloudServer();
-    } catch (setupError) {
-      Logger.error({ message: setupError.message, stack: setupError.stack });
-    }
+    });
   }
 
   static sendToClient(event, client, ...agrs) {
@@ -43,7 +40,7 @@ module.exports = class WebsocketManager extends WebsocketManagerCore {
     if (!SessionService.sessionId) {
       await SessionService.requestSessionId();
     }
-    debug('Connecting to Cloud Server...');
+    Debugger.websocket('Connecting to Cloud Server...');
     this.cloud = SocketIOClient(config.cloudEndPoint, {
       transports: ['websocket'],
       reconnection: true,
@@ -55,16 +52,7 @@ module.exports = class WebsocketManager extends WebsocketManagerCore {
       }
     });
     this.cloud.on('connect', async () => {
-      debug('Connected to Cloud Server');
-      // setInterval(() => {
-      this.cloud.emit('/garden/data', { data: 'any' }, (rs) => {
-        debug(rs);
-        this.cloud.disconnect();
-        setTimeout(() => {
-          this.cloud.connect();
-        }, 3000);
-      });
-      // }, 2000);
+      Debugger.websocket('Connected to Cloud Server');
     });
     this.accept(this.cloud);
   }

@@ -1,16 +1,8 @@
-const path = require('path');
-const urlParser = require('url');
-const DebugHelper = require('debug');
-const pathMatch = require('path-match')({
-  sensitive: false,
-  strict: false,
-  end: true
-});
+const websocketCoreApp = require('express').Router();
+const queryString = require('query-string');
+const expressQueryParser = require('express-query-parser');
 const Logger = require('../services/Logger');
-const { Debug } = require('../utils/constants');
-
-const debug = DebugHelper(Debug.ws.CORE);
-const debugSetupRouting = DebugHelper(Debug.ws.SETUP_ROUTING);
+const Debugger = require('../services/Debugger');
 
 module.exports = class WebsocketManagerCore {
   /**
@@ -36,25 +28,29 @@ module.exports = class WebsocketManagerCore {
     return this.clients[socketId];
   }
 
-  static get routers() {
-    this._routers = this._routers || [];
-    return this._routers;
-  }
-
-  static get handlers() {
-    if (!this._handlers) this._handlers = new Map();
-    return this._handlers;
-  }
-
   static setup(wsServer) {
+    Debugger.wsSetup('Setup Websocket Core');
+    websocketCoreApp.use((req, res, next) => {
+      req.path = req._parsedUrl.pathname;
+      req.query = queryString.parse(req._parsedUrl.search);
+      req.websocket = true;
+      next();
+    });
+    websocketCoreApp.use(
+      expressQueryParser({
+        parseNull: true,
+        parseBoolean: true
+      })
+    );
+
     this.wsServer = wsServer;
     wsServer.on('connection', (socket) => {
       try {
-        debug('Client connected: ', socket.handshake.sessionID, socket.conn.remoteAddress);
+        Debugger.wsCore('Client connected: ', socket.handshake.sessionID, socket.conn.remoteAddress);
         this.accept(socket);
 
         socket.on('disconnect', () => {
-          debug('Client disconnected: ', socket.handshake.sessionID, socket.conn.remoteAddress);
+          Debugger.wsCore('Client disconnected: ', socket.handshake.sessionID, socket.conn.remoteAddress);
         });
       } catch (wsClientError) {
         Logger.error({ message: wsClientError.message, stack: wsClientError.stack });
@@ -62,26 +58,8 @@ module.exports = class WebsocketManagerCore {
     });
   }
 
-  static use(router) {
-    this.routers.push(router);
-    this._storeHandlers(router);
-    this.clientArray.forEach((client) => {
-      this._attachRouterToClient(router, client);
-    });
-  }
-
-  static _storeHandlers(router) {
-    const { fullRoutePath, handlers, children } = router;
-    children.forEach(childRouter => this._storeHandlers(childRouter));
-    handlers.forEach((handler) => {
-      const handlerPath = path.posix.join(handler[2] ? `/${handler[2].toUpperCase()}/` : '', fullRoutePath || '/', handler[0]);
-      const handlerMatch = pathMatch(handlerPath);
-      debugSetupRouting(handlerPath);
-      this.handlers.set(handlerMatch, {
-        handler: handler[1],
-        pattern: handlerPath
-      });
-    });
+  static use(path, router) {
+    websocketCoreApp.use(path, router);
   }
 
   static accept(client) {
@@ -91,40 +69,43 @@ module.exports = class WebsocketManagerCore {
   }
 
   static async _onEvent(client, ...args) {
-    const [urlPathQuery, request, clientRes] = args[0].data;
-    const url = urlParser.parse(`http://${path.posix.join('localhost', urlPathQuery)}`);
-    const { pathname } = url;
-    const iterator = this.handlers.entries();
-    let handler = iterator.next();
-    const req = {
+    const [originalUrl, parsedRequest, clientRes] = args[0].data;
+    const req = this._buildRequest(client, originalUrl, parsedRequest);
+    const res = this._buildResponse(clientRes, req);
+    websocketCoreApp(req, res, () => {});
+  }
+
+  static _buildRequest(client, originalUrl, parsedRequest) {
+    return {
+      method: parsedRequest.method,
+      url: parsedRequest.url,
+      body: parsedRequest.body,
       socket: client,
       session: client.handshake.session || {},
       sessionID: client.handshake.sessionID,
-      sessionStore: client.handshake.sessionStore,
-      originalUrl: urlPathQuery,
-      baseUrl: pathname,
-      url: pathname,
-      pathname,
-      ...request
+      sessionStore: client.handshake.sessionStore
     };
+  }
+
+  static _buildResponse(clientRes, req) {
     const res = {
-      send: (response) => {
-        if (clientRes) clientRes(response);
-      },
-      socket: client,
-      emit: client.emit.bind(client)
+      req,
+      socket: req.socket
     };
-    do {
-      const [match, handleFunc] = handler.value;
-      const params = match(pathname);
-      if (params) {
-        req.params = params;
-        // eslint-disable-next-line no-await-in-loop
-        const canGo = await handleFunc.handler(req, res);
-        if (!canGo) break;
-      }
-      handler = iterator.next();
-    } while (handler && !handler.done);
+    req.res = res;
+    res.send = function send(response) {
+      if (clientRes) clientRes(response);
+      return this;
+    };
+    res.status = function status() {
+      return this;
+    };
+    res.emit = function emit(...args) {
+      if (!this.socket) return this;
+      this.socket.emit(...args);
+      return this;
+    };
+    return res;
   }
 
   static sendToClient(clientId, {
