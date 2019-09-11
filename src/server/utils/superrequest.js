@@ -8,7 +8,7 @@ class SuperRequest {
   static get agent() { return superagent; }
 
   static async emit(...args) {
-    if (superws.connected) return superws.emit(...args);
+    if (superws.connected) return this.socket.emit(...args);
     return null;
   }
 
